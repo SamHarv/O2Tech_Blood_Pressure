@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "276687207652",
+    "project_id": "o2tech-blood-pressure",
+    "storage_bucket": "o2tech-blood-pressure.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:276687207652:android:cbd9314c44024f630d00f1",
+        "android_client_info": {
+          "package_name": "com.example.o2_bp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM6UzsgnG9ZaeAbf0h5e78OXWttED2hw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
