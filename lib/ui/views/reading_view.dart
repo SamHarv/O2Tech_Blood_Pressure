@@ -275,11 +275,11 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                             return AlertDialog(
                               backgroundColor: Colors.black,
                               title: const Text(
-                                "Delete Project",
+                                "Delete Reading",
                                 style: TextStyle(color: Colors.white),
                               ),
                               content: const Text(
-                                "Are you sure you want to delete this project?",
+                                "Are you sure you want to delete this reading?",
                                 style: TextStyle(color: Colors.white),
                               ),
                               actions: [

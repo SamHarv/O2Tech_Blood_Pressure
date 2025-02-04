@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'firebase_options.dart';
 import 'logic/routes/routes.dart';
 
-// TODO: Refactor, splash screen, launcher icons
+// TODO: Refactor
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
