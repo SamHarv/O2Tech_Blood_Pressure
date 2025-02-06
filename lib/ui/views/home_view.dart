@@ -9,8 +9,11 @@ import '../widgets/bp_chart.dart';
 import '../widgets/new_reading_dialog.dart';
 
 class HomeView extends ConsumerStatefulWidget {
+  /// [HomeView] to display blood pressure readings
+
   const HomeView({super.key, required this.title});
 
+  /// [title] for display in appBar
   final String title;
 
   @override
@@ -22,6 +25,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Widget build(BuildContext context) {
     final repo = ref.read(db);
     final urlLauncher = ref.read(url);
+
+    /// [getReadings] to retrieve readings from repository
     Future<List<ReadingModel>> getReadings() async {
       final readings = await repo.getReadings();
       return readings;
@@ -32,7 +37,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
         centerTitle: false,
         title: Text(
           widget.title,
-          style: darkModeLargeFont,
+          style: largeFont,
         ),
         actions: [
           // Navigate to account view
@@ -67,87 +72,90 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Expanded(
+            child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.black54,
                 borderRadius: BorderRadius.circular(10),
               ),
-              height: MediaQuery.of(context).size.height * 0.4,
               width: double.infinity,
               child: FutureBuilder(
-                future: getReadings(),
+                future: getReadings(), // Retrieve readings for chart
                 builder: (context, snapshot) {
+                  // Loading
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
+                  // Error
                   if (snapshot.hasError) {
                     return Center(
                         child: Text(
                       'Error: ${snapshot.error}',
-                      style: darkModeFont,
+                      style: font,
                     ));
                   }
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(
-                        child: Text(
-                      'No readings available!',
-                      style: darkModeFont,
-                    ));
-                  }
-
+                  // Can display chart with or without data
                   return BPChart(readings: snapshot.data!);
                 },
               ),
             ),
-            Container(
+          ),
+          Expanded(
+            child: Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
                 color: Colors.black54,
                 borderRadius: BorderRadius.circular(10),
               ),
-              height: MediaQuery.of(context).size.height * 0.4,
               width: double.infinity,
               child: FutureBuilder(
-                future: getReadings(),
+                future: getReadings(), // Retrieve readings for list
                 builder: (context, snapshot) {
+                  // Loading
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
+                  // Error
                   if (snapshot.hasError) {
                     return Center(
                       child: Text(
                         'An error occurred! ${snapshot.error}',
-                        style: darkModeFont,
+                        style: font,
                       ),
                     );
                   }
                   final readings = snapshot.data!;
+                  // No readings
                   if (readings.isEmpty) {
                     return Center(
                       child: Text(
-                        'No Readings Found!',
-                        style: darkModeFont,
+                        'No Readings Found!\n\n'
+                        'Add a reading by clicking the + button below.',
+                        textAlign: TextAlign.center,
+                        style: font,
                       ),
                     );
                   }
-
+                  // Display readings as list
                   return ListView.builder(
                     itemBuilder: (context, index) {
+                      // Format date
                       final year = readings[index].date.substring(0, 4);
                       final month = readings[index].date.substring(5, 7);
                       final day = readings[index].date.substring(8, 10);
                       final date = '$day/$month/$year';
                       return Column(
                         children: [
+                          // ListTile for each reading
                           Card(
                             child: ListTile(
                               shape: RoundedRectangleBorder(
@@ -159,12 +167,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                               ),
                               title: Text(
                                 '${readings[index].systolic}/${readings[index].diastolic}',
-                                style: darkModeLargeFont,
+                                style: largeFont,
                               ),
-                              subtitle: Text(date, style: darkModeSmallFont),
+                              subtitle: Text(date, style: smallFont),
                               trailing: Text(
                                 readings[index].time,
-                                style: darkModeSmallFont,
+                                style: smallFont,
                               ),
                               onTap: () {
                                 Beamer.of(context).beamToNamed(
@@ -183,18 +191,22 @@ class _HomeViewState extends ConsumerState<HomeView> {
                 },
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: green,
         onPressed: () async {
+          // Add a new reading
           await showDialog(
               context: context, builder: (context) => NewReadingDialog());
           setState(() {});
         },
         tooltip: 'Add Reading',
-        child: const Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+          color: white,
+        ),
       ),
     );
   }

@@ -1,4 +1,6 @@
 class Validation {
+  /// Class to validate user input
+
   /// Ensure password is valid
   String? validatePassword(String value) {
     if (value.isEmpty) {
@@ -28,8 +30,8 @@ class Validation {
     }
     return null;
   }
-  // validate systolic and diastolic values
 
+  /// Validate systolic and diastolic values
   bool validateSystolicDiastolic(String systolic, String diastolic) {
     try {
       if (systolic.isEmpty || diastolic.isEmpty) {
@@ -44,6 +46,7 @@ class Validation {
     }
   }
 
+  /// Validate time
   bool validateTime(String hours, String minutes) {
     try {
       if (hours.isEmpty || minutes.isEmpty) {

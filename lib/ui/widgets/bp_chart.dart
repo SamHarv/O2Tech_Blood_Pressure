@@ -6,9 +6,13 @@ import 'package:intl/intl.dart';
 import '../../config/constants.dart';
 import '../../data/models/reading_model.dart';
 
+/// Select [TimeRange] to filter the readings in chart
 enum TimeRange { week, month, threeMonths, year }
 
 class BPChart extends StatefulWidget {
+  /// Line chart to display blood pressure readings
+
+  /// List of blood pressure readings
   final List<ReadingModel> readings;
 
   const BPChart({super.key, required this.readings});
@@ -27,6 +31,7 @@ class _BPChartState extends State<BPChart> {
     _updateFilteredReadings();
   }
 
+  /// Update [_filteredReadings] based on [_timeRange]
   void _updateFilteredReadings() {
     final now = DateTime.now();
     DateTime cutoffDate;
@@ -55,18 +60,21 @@ class _BPChartState extends State<BPChart> {
         (a, b) => DateTime.parse(a.date).compareTo(DateTime.parse(b.date)));
   }
 
+  /// Get systolic spots for the line chart
   List<FlSpot> _getSystolicSpots() {
     return _filteredReadings.asMap().entries.map((entry) {
       return FlSpot(entry.key.toDouble(), entry.value.systolic.toDouble());
     }).toList();
   }
 
+  /// Get diastolic spots for the line chart
   List<FlSpot> _getDiastolicSpots() {
     return _filteredReadings.asMap().entries.map((entry) {
       return FlSpot(entry.key.toDouble(), entry.value.diastolic.toDouble());
     }).toList();
   }
 
+  /// Get x axis label for the line chart
   String _getBottomTitle(double value) {
     if (value >= 0 && value < _filteredReadings.length) {
       final reading = _filteredReadings[value.toInt()];
@@ -85,6 +93,7 @@ class _BPChartState extends State<BPChart> {
     return '';
   }
 
+  /// Get systolic and diastolic default target lines
   List<HorizontalLine> _getTargetLines() {
     return [
       HorizontalLine(
@@ -92,24 +101,12 @@ class _BPChartState extends State<BPChart> {
         color: Colors.red,
         strokeWidth: 1,
         dashArray: [5, 5], // Creates a dashed line
-        // label: HorizontalLineLabel(
-        //   show: true,
-        //   alignment: Alignment.topRight,
-        //   padding: const EdgeInsets.only(right: 5, bottom: 5),
-        //   style: const TextStyle(color: Colors.red, fontSize: 10),
-        // ),
       ),
       HorizontalLine(
         y: 80,
         color: Colors.blue,
         strokeWidth: 1,
         dashArray: [5, 5], // Creates a dashed line
-        // label: HorizontalLineLabel(
-        //   show: true,
-        //   alignment: Alignment.topRight,
-        //   padding: const EdgeInsets.only(right: 5, bottom: 5),
-        //   style: const TextStyle(color: Colors.orange, fontSize: 10),
-        // ),
       ),
     ];
   }
@@ -118,25 +115,26 @@ class _BPChartState extends State<BPChart> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Time range selector
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: SegmentedButton<TimeRange>(
             segments: [
               ButtonSegment(
                 value: TimeRange.week,
-                label: Text('W', style: darkModeSmallFont),
+                label: Text('W', style: smallFont),
               ),
               ButtonSegment(
                 value: TimeRange.month,
-                label: Text('M', style: darkModeSmallFont),
+                label: Text('M', style: smallFont),
               ),
               ButtonSegment(
                 value: TimeRange.threeMonths,
-                label: Text('Q', style: darkModeSmallFont),
+                label: Text('Q', style: smallFont),
               ),
               ButtonSegment(
                 value: TimeRange.year,
-                label: Text('Y', style: darkModeSmallFont),
+                label: Text('Y', style: smallFont),
               ),
             ],
             selected: {_timeRange},

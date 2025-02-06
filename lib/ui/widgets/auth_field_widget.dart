@@ -26,21 +26,21 @@ class AuthFieldWidget extends ConsumerWidget {
       width: mediaWidth * 0.8,
       height: 60,
       child: TextField(
-        style: darkModeFont,
+        style: font,
         controller: textController,
         textInputAction: TextInputAction.next,
         obscureText: obscurePassword,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white,
+              color: white,
             ),
             borderRadius: const BorderRadius.all(
               Radius.circular(64),
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.white),
+            borderSide: BorderSide(color: white),
           ),
           hintText: hintText,
           hintStyle: GoogleFonts.openSans(

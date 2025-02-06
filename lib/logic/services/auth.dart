@@ -3,9 +3,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Auth {
   /// Provide access to [FirebaseAuth]
 
+  /// Firebase authentication instance
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  /// Get [user]
+  /// Get current [user]
   User? get user => _firebaseAuth.currentUser;
 
   /// Sign up / Create account

@@ -20,11 +20,6 @@ class _SignInViewState extends ConsumerState<SignInView> {
   final _passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -35,7 +30,6 @@ class _SignInViewState extends ConsumerState<SignInView> {
   Widget build(BuildContext context) {
     final mediaWidth = MediaQuery.sizeOf(context).width;
     final auth = ref.read(authentication);
-    final logo = 'images/logo.png';
     final urlLauncher = ref.read(url);
 
     return Scaffold(
@@ -57,6 +51,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
               ),
               Column(
                 children: [
+                  // Input email
                   AuthFieldWidget(
                     textController: _emailController,
                     obscurePassword: false,
@@ -64,6 +59,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
                     mediaWidth: mediaWidth,
                   ),
                   gapH10,
+                  // Input password
                   AuthFieldWidget(
                     textController: _passwordController,
                     obscurePassword: true,
@@ -77,7 +73,7 @@ class _SignInViewState extends ConsumerState<SignInView> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.white,
+                          white,
                         ),
                       ),
                       onPressed: () async {
@@ -89,12 +85,12 @@ class _SignInViewState extends ConsumerState<SignInView> {
                           builder: (BuildContext context) {
                             return Center(
                               child: CircularProgressIndicator(
-                                color: Colors.white,
+                                color: white,
                               ),
                             );
                           },
                         );
-
+                        // Sign in
                         try {
                           await auth.signIn(
                             email: _emailController.text.trim(),
@@ -118,25 +114,27 @@ class _SignInViewState extends ConsumerState<SignInView> {
                       },
                       child: Text(
                         'Sign In',
-                        style: lightModeFont,
+                        style: blackFont,
                       ),
                     ),
                   ),
                   gapH10,
+                  // Navigate to sign up view
                   TextButton(
                     onPressed: () async {
                       // ignore: use_build_context_synchronously
                       Beamer.of(context).beamToNamed('/sign-up');
                     },
-                    child: Text('Sign Up', style: darkModeSmallFont),
+                    child: Text('Sign Up', style: smallFont),
                   ),
                   gapH10,
+                  // Navigate to forgot password view
                   TextButton(
                     onPressed: () async {
                       // ignore: use_build_context_synchronously
                       Beamer.of(context).beamToNamed('/forgot-password');
                     },
-                    child: Text('Forgot Password', style: darkModeSmallFont),
+                    child: Text('Forgot Password', style: smallFont),
                   ),
                   gapH10,
                   // O2Tech logo to launch O2Tech website

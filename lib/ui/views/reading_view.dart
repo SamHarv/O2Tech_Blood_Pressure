@@ -7,12 +7,16 @@ import '../../data/models/reading_model.dart';
 import '../../logic/providers/providers.dart';
 import '../../logic/services/validation.dart';
 
+/// [TimeSelection] enum for selecting AM or PM
 enum TimeSelection { am, pm }
 
 class ReadingView extends ConsumerStatefulWidget {
-  const ReadingView({super.key, required this.reading});
+  /// [ReadingView] to display, edit, or delete a blood pressure reading
 
+  /// [reading] to display
   final ReadingModel reading;
+
+  const ReadingView({super.key, required this.reading});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _ReadingViewState();
@@ -20,53 +24,41 @@ class ReadingView extends ConsumerStatefulWidget {
 
 class _ReadingViewState extends ConsumerState<ReadingView> {
   final _formKey = GlobalKey<FormState>();
+  // Manage focus for hours and minutes text fields so they remain visible
   final _scrollController = ScrollController();
   final _hoursFocusNode = FocusNode();
   final _minutesFocusNode = FocusNode();
+  // Manage selected time (AM or PM)
   late Set<TimeSelection> selected;
   String ampm = '';
+  // Set temporary values for text fields
   late String tempSystolic;
   late String tempDiastolic;
   late String tempComments;
   late String tempHours;
   late String tempMinutes;
 
-  void showMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.grey[600],
-          title: Center(
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   void initState() {
+    // Set initial values for time fields
     ampm = widget.reading.time.split(' ')[1];
     selected = widget.reading.time.contains('am')
         ? {TimeSelection.am}
         : {TimeSelection.pm};
 
+    // Scroll to bottom when hours or minutes text fields are focused
     _hoursFocusNode.addListener(() {
       if (_hoursFocusNode.hasFocus) {
         _scrollToBottom();
       }
     });
-
     _minutesFocusNode.addListener(() {
       if (_minutesFocusNode.hasFocus) {
         _scrollToBottom();
       }
     });
 
+    // Set initial values for text fields
     tempSystolic = widget.reading.systolic.toString();
     tempDiastolic = widget.reading.diastolic.toString();
     tempComments = widget.reading.comments;
@@ -75,6 +67,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
     super.initState();
   }
 
+  /// Scroll to bottom of screen to keep text fields visible when editing
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
@@ -102,11 +95,10 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
     final minutesController = TextEditingController(text: tempMinutes);
     final repo = ref.read(db);
 
-    // convert to int
+    // Format date
     final year = int.parse(widget.reading.date.substring(0, 4));
     final month = int.parse(widget.reading.date.substring(5, 7));
     final day = int.parse(widget.reading.date.substring(8, 10));
-
     String date = widget.reading.date;
 
     return Scaffold(
@@ -115,24 +107,27 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
+            // Back to HomeView
             Beamer.of(context).beamBack();
           },
         ),
         centerTitle: false,
         title: Text(
           'O2Tech BP',
-          style: darkModeLargeFont,
+          style: largeFont,
         ),
       ),
       body: Container(
+        // Fill screen
         height: MediaQuery.sizeOf(context).height - kToolbarHeight,
-        decoration: BoxDecoration(color: Colors.black),
+        decoration: BoxDecoration(color: black),
         child: SingleChildScrollView(
           controller: _scrollController,
           child: Padding(
             padding: const EdgeInsets.all(32),
             child: Column(
               children: [
+                // Row to align text to left
                 Row(
                   children: [
                     Text(
@@ -151,6 +146,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Systolic input field
                         TextFormField(
                           controller: systolicController,
                           decoration: const InputDecoration(
@@ -161,6 +157,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           onChanged: (value) => tempSystolic = value,
                         ),
+                        // Diastolic input field
                         TextFormField(
                           controller: diastolicController,
                           decoration: const InputDecoration(
@@ -171,6 +168,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           onChanged: (value) => tempDiastolic = value,
                         ),
+                        // Comments input field
                         TextFormField(
                           controller: commentsController,
                           decoration: const InputDecoration(
@@ -184,6 +182,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                               bottom: MediaQuery.of(context).viewInsets.bottom),
                           onChanged: (value) => tempComments = value,
                         ),
+                        // Date picker
                         SizedBox(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: CalendarDatePicker(
@@ -199,6 +198,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Row(
                             children: [
+                              // Hours input field
                               Expanded(
                                 child: TextFormField(
                                   controller: hoursController,
@@ -216,6 +216,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                                 ),
                               ),
                               SizedBox(width: 8),
+                              // Minutes input field
                               Expanded(
                                 child: TextFormField(
                                   controller: minutesController,
@@ -267,20 +268,22 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // Delete button
                     TextButton(
                       onPressed: () {
+                        // Confirm deletion
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              backgroundColor: Colors.black,
+                              backgroundColor: black,
                               title: const Text(
                                 "Delete Reading",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: white),
                               ),
                               content: const Text(
                                 "Are you sure you want to delete this reading?",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(color: white),
                               ),
                               actions: [
                                 TextButton(
@@ -289,7 +292,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                                   },
                                   child: const Text(
                                     "Cancel",
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(color: white),
                                   ),
                                 ),
                                 TextButton(
@@ -318,12 +321,14 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        // Back to HomeView
                         TextButton(
                           onPressed: () {
                             Beamer.of(context).beamBack();
                           },
                           child: const Text('Cancel'),
                         ),
+                        // Save updates
                         TextButton(
                           onPressed: () {
                             bool valid = true;
@@ -331,16 +336,16 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                                 systolicController.text,
                                 diastolicController.text)) {
                               showMessage(
-                                  'Invalid systolic or diastolic value!');
+                                  'Invalid systolic or diastolic value!',
+                                  context);
                               valid = false;
                             }
 
                             if (!Validation().validateTime(
                                 hoursController.text, minutesController.text)) {
-                              showMessage('Invalid time!');
+                              showMessage('Invalid time!', context);
                               valid = false;
                             }
-
                             // Ensure time is double digit
                             if (hoursController.text.length == 1) {
                               hoursController.text = '0${hoursController.text}';
@@ -349,7 +354,6 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                               minutesController.text =
                                   '0${minutesController.text}';
                             }
-
                             if (valid) {
                               try {
                                 final reading = ReadingModel(
@@ -365,7 +369,7 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
                                 repo.updateReading(reading: reading);
                                 Beamer.of(context).beamBack();
                               } catch (e) {
-                                showMessage(e.toString());
+                                showMessage(e.toString(), context);
                                 return;
                               }
                             }

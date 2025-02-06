@@ -5,10 +5,13 @@ import '../models/reading_model.dart';
 import '../models/user_model.dart';
 
 class Firestore {
+  /// [Firestore] class to interact with Firestore
+
+  /// Collection reference for users
   final _users = FirebaseFirestore.instance.collection('users');
 
   /// Create a user
-  Future<void> addUser({required UserModel user}) async {
+  Future<void> createUser({required UserModel user}) async {
     try {
       await _users.doc(user.id).set({
         'id': FirebaseAuth.instance.currentUser!.uid,
@@ -56,7 +59,7 @@ class Firestore {
     }
   }
 
-  // Create reading
+  /// Create a reading
   Future<void> createReading({required ReadingModel reading}) async {
     try {
       await _users
@@ -76,7 +79,7 @@ class Firestore {
     }
   }
 
-  // Get reading
+  /// Get reading
   Future<ReadingModel> getReading({required String id}) async {
     try {
       final reading = await _users
@@ -97,7 +100,7 @@ class Firestore {
     }
   }
 
-  // Get readings sorted by date
+  /// Get all readings for current user sorted by date
   Future<List<ReadingModel>> getReadings() async {
     try {
       final readings = await _users
@@ -120,12 +123,12 @@ class Firestore {
     }
   }
 
-  List<ReadingModel> sortReadings(List<ReadingModel> readings) {
-    readings.sort((a, b) => a.date.compareTo(b.date));
-    return readings;
-  }
+  // List<ReadingModel> sortReadings(List<ReadingModel> readings) {
+  //   readings.sort((a, b) => a.date.compareTo(b.date));
+  //   return readings;
+  // }
 
-  // Update reading
+  /// Update a reading
   Future<void> updateReading({required ReadingModel reading}) async {
     try {
       await _users
@@ -144,7 +147,7 @@ class Firestore {
     }
   }
 
-  // Delete reading
+  /// Delete reading
   Future<void> deleteReading({required String id}) async {
     try {
       await _users

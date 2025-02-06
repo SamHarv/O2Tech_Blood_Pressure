@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../config/constants.dart';
 import '../../data/models/reading_model.dart';
 import '../../logic/providers/providers.dart';
 import '../../logic/services/validation.dart';
 
+/// [TimeSelection] enum for selecting AM or PM
 enum TimeSelection { am, pm }
 
 class NewReadingDialog extends ConsumerStatefulWidget {
+  /// Dialog to enter a new reading
+
   const NewReadingDialog({super.key});
 
   @override
@@ -21,26 +25,9 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
   final _diastolicController = TextEditingController();
   final _commentsController = TextEditingController();
   final _hoursController = TextEditingController();
-  final _minutesController = TextEditingController();
-  String date = DateTime.now().toString();
-  String ampm = 'am';
-
-  void showMessage(String message) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: Colors.grey[600],
-          title: Center(
-            child: Text(
-              message,
-              style: const TextStyle(color: Colors.white),
-            ),
-          ),
-        );
-      },
-    );
-  }
+  final _minutesController = TextEditingController(text: '00'); // default to 00
+  String date = DateTime.now().toString(); // default to today
+  String ampm = 'am'; // default to am
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +37,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
       builder: (context, setState) {
         return SingleChildScrollView(
           child: AlertDialog(
-            backgroundColor: Colors.black,
+            backgroundColor: black,
             title: const Text('Add New Reading'),
             content: Form(
               key: _formKey,
@@ -58,6 +45,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // Input systolic value
                     TextFormField(
                       controller: _systolicController,
                       decoration: const InputDecoration(
@@ -67,6 +55,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                       scrollPadding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
                     ),
+                    // Input diastolic value
                     TextFormField(
                       controller: _diastolicController,
                       decoration: const InputDecoration(
@@ -76,6 +65,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                       scrollPadding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
                     ),
+                    // Input comments
                     TextFormField(
                       controller: _commentsController,
                       decoration: const InputDecoration(
@@ -88,6 +78,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                       scrollPadding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
                     ),
+                    // Select date
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: CalendarDatePicker(
@@ -103,6 +94,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: Row(
                         children: [
+                          // Input hours
                           Expanded(
                             child: TextFormField(
                               scrollPadding: EdgeInsets.only(
@@ -116,6 +108,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                             ),
                           ),
                           SizedBox(width: 8),
+                          // Input minutes
                           Expanded(
                             child: TextFormField(
                               controller: _minutesController,
@@ -160,28 +153,29 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
               ),
             ),
             actions: [
+              // Cancel reading creation
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
                 child: const Text('Cancel'),
               ),
+              // Save new reading
               TextButton(
                 onPressed: () {
                   String id = '';
                   bool valid = true;
                   if (!Validation().validateSystolicDiastolic(
                       _systolicController.text, _diastolicController.text)) {
-                    showMessage('Invalid systolic or diastolic value!');
+                    showMessage(
+                        'Invalid systolic or diastolic value!', context);
                     valid = false;
                   }
-
                   if (!Validation().validateTime(
                       _hoursController.text, _minutesController.text)) {
-                    showMessage('Invalid time!');
+                    showMessage('Invalid time!', context);
                     valid = false;
                   }
-
                   // Ensure time is double digit
                   if (_hoursController.text.length == 1) {
                     _hoursController.text = '0${_hoursController.text}';
@@ -189,7 +183,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                   if (_minutesController.text.length == 1) {
                     _minutesController.text = '0${_minutesController.text}';
                   }
-
+                  // Create reading
                   if (valid) {
                     try {
                       const uuid = Uuid();
@@ -206,7 +200,7 @@ class _ReadingDialogState extends ConsumerState<NewReadingDialog> {
                       repo.createReading(reading: reading);
                       Navigator.of(context).pop();
                     } catch (e) {
-                      showMessage(e.toString());
+                      showMessage(e.toString(), context);
                       return;
                     }
                   }

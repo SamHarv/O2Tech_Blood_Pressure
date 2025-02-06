@@ -4,18 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'config/constants.dart';
 import 'firebase_options.dart';
 import 'logic/routes/routes.dart';
 
-// TODO: Refactor
-
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.black,
+    statusBarColor: black,
   ));
   runApp(const ProviderScope(child: O2TechBP()));
 }
@@ -29,23 +27,22 @@ class O2TechBP extends StatelessWidget {
       routerDelegate: routerDelegate,
       routeInformationParser: BeamerParser(),
       debugShowCheckedModeBanner: false,
-      title: 'O2Tech BP',
+      title: 'O2Tech Blood Pressure',
       theme: ThemeData.dark().copyWith(
         colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF84C754),
-          secondary: Color(0xFF84C754),
+          primary: green,
+          secondary: green,
         ),
-        primaryColor: const Color(0xFF84C754),
-        // Set font family for the entire app with white open sans
+        primaryColor: green,
         textTheme: GoogleFonts.openSansTextTheme().apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
+          bodyColor: white,
+          displayColor: white,
         ),
-        scaffoldBackgroundColor: Colors.grey[900],
+        scaffoldBackgroundColor: backgroundColour,
         appBarTheme: AppBarTheme(
-          color: Colors.grey[900],
+          color: backgroundColour,
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: Colors.black,
+            statusBarColor: black,
           ),
         ),
       ),

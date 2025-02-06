@@ -20,11 +20,6 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
   final _passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -44,7 +39,7 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: white,
           ),
           onPressed: () async {
             // Back to home page
@@ -58,30 +53,31 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              // Logo
               Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(32),
                   child: Image.asset(
-                    'images/logo.png',
+                    logo,
                     width: mediaWidth * 0.5,
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+              gapH40,
               Text(
                 'Already signed in!',
-                style: darkModeLargeFont,
+                style: largeFont,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 40),
+              gapH40,
               SizedBox(
                 width: mediaWidth * 0.8,
                 height: 60,
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(
-                      Colors.white,
+                      white,
                     ),
                   ),
                   // Sign out
@@ -92,7 +88,7 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
                   },
                   child: Text(
                     'Sign Out',
-                    style: lightModeFont,
+                    style: blackFont,
                   ),
                 ),
               ),
@@ -106,10 +102,10 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          backgroundColor: Colors.black,
+                          backgroundColor: black,
                           title: Text(
                             'Are you sure you want to delete your account?',
-                            style: darkModeLargeFont,
+                            style: largeFont,
                           ),
                           actions: [
                             // Cancel deletion
@@ -120,7 +116,7 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
                               },
                               child: Text(
                                 'Cancel',
-                                style: darkModeSmallFont,
+                                style: smallFont,
                               ),
                             ),
                             // Delete account
@@ -143,7 +139,7 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
                               },
                               child: Text(
                                 'Delete',
-                                style: darkModeSmallFont,
+                                style: smallFont,
                               ),
                             ),
                           ],
@@ -152,7 +148,7 @@ class _AccountViewWidgetState extends ConsumerState<AccountView> {
                 },
                 child: Text(
                   'Delete Account',
-                  style: darkModeSmallFont,
+                  style: smallFont,
                 ),
               ),
               gapH10,

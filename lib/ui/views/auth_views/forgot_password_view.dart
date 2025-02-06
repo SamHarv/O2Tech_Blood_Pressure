@@ -21,11 +21,6 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
   final _passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -35,8 +30,8 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
   @override
   Widget build(BuildContext context) {
     final auth = ref.read(authentication);
-    final mediaWidth = MediaQuery.sizeOf(context).width;
     final urlLauncher = ref.read(url);
+    final mediaWidth = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +40,7 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: white,
           ),
           onPressed: () async {
             // ignore: use_build_context_synchronously
@@ -60,7 +55,7 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
             children: [
               Text(
                 'Receive an email to\nreset your password',
-                style: darkModeLargeFont,
+                style: largeFont,
                 textAlign: TextAlign.center,
               ),
               gapH20,
@@ -77,7 +72,7 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all<Color>(
-                      Colors.white,
+                      white,
                     ),
                   ),
                   onPressed: () async {
@@ -88,7 +83,7 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
                       builder: (BuildContext context) {
                         return Center(
                           child: CircularProgressIndicator(
-                            color: Colors.white,
+                            color: white,
                           ),
                         );
                       },
@@ -115,11 +110,12 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
                   },
                   child: Text(
                     'Reset Password',
-                    style: lightModeFont,
+                    style: blackFont,
                   ),
                 ),
               ),
               gapH20,
+              // Navigate to sign in view
               TextButton(
                 onPressed: () async {
                   // ignore: use_build_context_synchronously
@@ -127,7 +123,7 @@ class _ForgotPasswordViewWidgetState extends ConsumerState<ForgotPasswordView> {
                 },
                 child: Text(
                   'Sign In',
-                  style: darkModeSmallFont,
+                  style: smallFont,
                 ),
               ),
               gapH10,

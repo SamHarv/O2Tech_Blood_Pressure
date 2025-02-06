@@ -5,9 +5,10 @@ import '../services/auth.dart';
 import '../services/url_launcher.dart';
 import '../services/validation.dart';
 
-// Firestore Service
+/// Singleton for [Firestore] Service
 final db = StateProvider((ref) => Firestore());
 
+/// Singleton for [Validation]
 final validation = StateProvider((ref) => Validation());
 
 /// Singleton for [Auth]

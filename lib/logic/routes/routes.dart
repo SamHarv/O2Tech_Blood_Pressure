@@ -16,14 +16,14 @@ final routerDelegate = BeamerDelegate(
   notFoundRedirectNamed: auth.user == null
       ? '/sign-in'
       : '/home', // check auth status and redirect to '/home' or '/sign-in'
-  initialPath: auth.user == null ? '/sign-in' : '/home',
+  initialPath: auth.user == null ? '/sign-in' : '/home', // As above
   locationBuilder: RoutesLocationBuilder(
     routes: {
       '/home': (context, state, data) {
         return const BeamPage(
           key: ValueKey('home'),
           type: BeamPageType.noTransition,
-          title: 'O2Tech BP',
+          title: 'O2Tech Blood Pressure',
           child: HomeView(title: 'O2Tech BP'),
         );
       },
@@ -31,8 +31,9 @@ final routerDelegate = BeamerDelegate(
         return BeamPage(
           key: const ValueKey('reading'),
           type: BeamPageType.noTransition,
-          title: 'Reading',
-          child: ReadingView(reading: data as ReadingModel),
+          title: 'BP Reading',
+          child:
+              ReadingView(reading: data as ReadingModel), // Pass reading data
         );
       },
       '/sign-in': (context, state, data) {

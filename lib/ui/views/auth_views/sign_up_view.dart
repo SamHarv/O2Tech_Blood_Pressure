@@ -22,11 +22,6 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
   final _nameController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
@@ -40,7 +35,6 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
     final auth = ref.read(authentication);
     final validate = ref.watch(validation);
     final urlLauncher = ref.read(url);
-    final logo = 'images/logo.png';
     final mediaWidth = MediaQuery.sizeOf(context).width;
 
     return Scaffold(
@@ -62,13 +56,15 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
               ),
               Column(
                 children: [
+                  // Input first name
                   AuthFieldWidget(
                     textController: _nameController,
                     obscurePassword: false,
-                    hintText: 'Name',
+                    hintText: 'First Name',
                     mediaWidth: mediaWidth,
                   ),
                   gapH10,
+                  // Input email
                   AuthFieldWidget(
                     textController: _emailController,
                     obscurePassword: false,
@@ -76,6 +72,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     mediaWidth: mediaWidth,
                   ),
                   gapH10,
+                  // Input password
                   AuthFieldWidget(
                     textController: _passwordController,
                     obscurePassword: true,
@@ -89,7 +86,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all<Color>(
-                          Colors.white,
+                          white,
                         ),
                       ),
                       onPressed: () async {
@@ -101,7 +98,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                           builder: (BuildContext context) {
                             return Center(
                               child: CircularProgressIndicator(
-                                color: Colors.white,
+                                color: white,
                               ),
                             );
                           },
@@ -134,7 +131,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                             name: _nameController.text.trim(),
                           );
                           // Add user to database
-                          await database.addUser(user: user);
+                          await database.createUser(user: user);
                           // Pop loading dialog
                           //ignore: use_build_context_synchronously
                           Navigator.pop(context);
@@ -152,7 +149,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                       },
                       child: Text(
                         'Sign Up',
-                        style: lightModeFont,
+                        style: blackFont,
                       ),
                     ),
                   ),
@@ -164,7 +161,7 @@ class _SignUpViewState extends ConsumerState<SignUpView> {
                     },
                     child: Text(
                       'Sign In',
-                      style: darkModeSmallFont,
+                      style: smallFont,
                     ),
                   ),
                   gapH10,
