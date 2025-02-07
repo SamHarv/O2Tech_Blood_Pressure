@@ -2,9 +2,11 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:o2_bp/config/constants.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../../data/models/reading_model.dart';
 import '../../logic/providers/providers.dart';
+import '../../logic/services/csv_export.dart';
 import '../widgets/bp_chart.dart';
 import '../widgets/new_reading_dialog.dart';
 
@@ -40,6 +42,30 @@ class _HomeViewState extends ConsumerState<HomeView> {
           style: largeFont,
         ),
         actions: [
+          // Export data
+          Tooltip(
+            message: 'Export Data',
+            child: IconButton(
+              iconSize: 24,
+              color: Colors.white,
+              icon: const Icon(Icons.file_download),
+              onPressed: () async {
+                try {
+                  if (kIsWeb) {
+                    // ignore: use_build_context_synchronously
+                    showMessage('Export not supported on web!', context);
+                    return;
+                  }
+                  // Export data
+                  final readings = await repo.getReadings();
+                  await CsvExport.exportReadings(readings);
+                } catch (e) {
+                  // ignore: use_build_context_synchronously
+                  showMessage('An error occurred! $e', context);
+                }
+              },
+            ),
+          ),
           // Navigate to account view
           Tooltip(
             message: 'Account View',

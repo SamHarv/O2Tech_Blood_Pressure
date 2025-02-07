@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../models/reading_model.dart';
 import '../models/user_model.dart';
 
@@ -122,11 +121,6 @@ class Firestore {
       rethrow;
     }
   }
-
-  // List<ReadingModel> sortReadings(List<ReadingModel> readings) {
-  //   readings.sort((a, b) => a.date.compareTo(b.date));
-  //   return readings;
-  // }
 
   /// Update a reading
   Future<void> updateReading({required ReadingModel reading}) async {

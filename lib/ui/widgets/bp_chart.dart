@@ -111,6 +111,27 @@ class _BPChartState extends State<BPChart> {
     ];
   }
 
+  /// Get average systolic and diasolic values for time period
+  String _getAverageValues() {
+    if (_filteredReadings.isEmpty) {
+      return 'No readings';
+    }
+
+    final systolicSum = _filteredReadings
+        .map((reading) => reading.systolic)
+        .reduce((a, b) => a + b);
+    final diastolicSum = _filteredReadings
+        .map((reading) => reading.diastolic)
+        .reduce((a, b) => a + b);
+
+    final systolicAverage =
+        (systolicSum / _filteredReadings.length).toStringAsFixed(0);
+    final diastolicAverage =
+        (diastolicSum / _filteredReadings.length).toStringAsFixed(0);
+
+    return 'Avg: $systolicAverage/$diastolicAverage';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -223,6 +244,15 @@ class _BPChartState extends State<BPChart> {
             ),
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
+          ),
+        ),
+        // const SizedBox(height: 16),
+        Divider(color: green),
+        Text(
+          _getAverageValues(),
+          style: GoogleFonts.openSans(
+            color: white,
+            fontSize: 24,
           ),
         ),
       ],
