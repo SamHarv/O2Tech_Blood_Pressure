@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:csv/csv.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -7,7 +8,8 @@ import '../../data/models/reading_model.dart';
 
 class CsvExport {
   /// Convert readings to CSV and share the file
-  static Future<void> exportReadings(List<ReadingModel> readings) async {
+  static Future<void> exportReadings(
+      List<ReadingModel> readings, BuildContext context) async {
     try {
       // Convert readings to list of lists format for CSV
       final List<List<dynamic>> rows = [];
@@ -37,12 +39,16 @@ class CsvExport {
       // Write CSV to file
       final file = File(path);
       await file.writeAsString(csvData);
-
       // Share the file
-      await Share.shareXFiles(
-        [XFile(path)],
-        subject: 'Blood Pressure Readings Export',
-      );
+      await Share.shareXFiles([XFile(path)],
+          subject: 'Blood Pressure Readings Export',
+          sharePositionOrigin: Rect.fromLTWH(
+              0,
+              0,
+              // ignore: use_build_context_synchronously
+              MediaQuery.of(context).size.width,
+              // ignore: use_build_context_synchronously
+              MediaQuery.of(context).size.height / 2));
     } catch (e) {
       rethrow;
     }

@@ -54,11 +54,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   if (kIsWeb) {
                     // ignore: use_build_context_synchronously
                     showMessage('Export not supported on web!', context);
+                    // demo@mail.com 000000
                     return;
                   }
                   // Export data
                   final readings = await repo.getReadings();
-                  await CsvExport.exportReadings(readings);
+                  // ignore: use_build_context_synchronously
+                  await CsvExport.exportReadings(readings, context);
                 } catch (e) {
                   // ignore: use_build_context_synchronously
                   showMessage('An error occurred! $e', context);
