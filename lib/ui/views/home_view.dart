@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import '../../data/models/reading_model.dart';
 import '../../logic/providers/providers.dart';
 import '../../logic/services/csv_export.dart';
+import '../widgets/banner_ad_widget.dart';
 import '../widgets/bp_chart.dart';
 import '../widgets/new_reading_dialog.dart';
 
@@ -23,6 +24,14 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 class _HomeViewState extends ConsumerState<HomeView> {
+  bool showAd = true;
+
+  @override
+  void initState() {
+    showAd = true;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final repo = ref.read(db);
@@ -220,20 +229,40 @@ class _HomeViewState extends ConsumerState<HomeView> {
               ),
             ),
           ),
+          // Display the ad if not web version
+          kIsWeb
+              ? SizedBox()
+              : showAd
+                  ? Align(
+                      alignment: Alignment.bottomCenter,
+                      child: BannerAdWidget())
+                  : SizedBox(),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: green,
-        onPressed: () async {
-          // Add a new reading
-          await showDialog(
-              context: context, builder: (context) => NewReadingDialog());
-          setState(() {});
-        },
-        tooltip: 'Add Reading',
-        child: const Icon(
-          Icons.add,
-          color: white,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50), // Make space for ad
+        child: FloatingActionButton(
+          backgroundColor: green,
+          onPressed: () async {
+            setState(() {
+              showAd = false; // hide ad
+            });
+            // Add a new reading
+            await showDialog(
+                context: context,
+                builder: (context) => NewReadingDialog()).then(
+              (value) {
+                setState(() {
+                  showAd = true; // restore ad when dialog closed
+                });
+              },
+            );
+          },
+          tooltip: 'Add Reading',
+          child: const Icon(
+            Icons.add,
+            color: white,
+          ),
         ),
       ),
     );

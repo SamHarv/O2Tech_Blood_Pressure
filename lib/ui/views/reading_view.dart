@@ -1,7 +1,9 @@
 import 'package:beamer/beamer.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:o2_bp/config/constants.dart';
+import 'package:o2_bp/ui/widgets/banner_ad_widget.dart';
 
 import '../../data/models/reading_model.dart';
 import '../../logic/providers/providers.dart';
@@ -111,11 +113,10 @@ class _ReadingViewState extends ConsumerState<ReadingView> {
             Beamer.of(context).beamBack();
           },
         ),
-        centerTitle: false,
-        title: Text(
-          'O2Tech BP',
-          style: largeFont,
-        ),
+        centerTitle: true,
+        title: kIsWeb
+            ? SizedBox()
+            : Align(alignment: Alignment.bottomCenter, child: BannerAdWidget()),
       ),
       body: Container(
         // Fill screen
